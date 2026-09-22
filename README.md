@@ -19,7 +19,7 @@ The source belongs in GitHub, but the commercial website should be deployed thro
 
 ## Intake
 
-The MVP form opens a prepared email to `justin@websitecheckpro.com`; it does not store submissions. Replace this with a secure form endpoint and Stripe Payment Links after the offer is validated.
+The intake form opens a prepared email to `justin@websitecheckpro.com`; it does not store submissions. Payments use Stripe-hosted Payment Links, while vehicle details and records remain separate from checkout.
 
 ## Public sample policy
 
