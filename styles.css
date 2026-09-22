@@ -221,6 +221,7 @@ h1 { max-width: 760px; margin-bottom: 25px; font-size: clamp(3rem, 6.5vw, 5.7rem
 .price-card p:not(.price):not(.card-kicker) { color: #c6d7cf; }
 .price-card li::before { color: #f0cf74; }
 .pricing-note { max-width: 900px; margin: 28px auto 0; color: #aebfb6; font-size: 0.86rem; text-align: center; }
+.pricing-note a { color: var(--white); text-underline-offset: 3px; }
 
 .intake-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: start; }
 .intake-layout > div > p:not(.eyebrow) { color: var(--muted); font-size: 1.06rem; }
