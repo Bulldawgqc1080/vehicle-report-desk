@@ -200,13 +200,17 @@
         <div>
           <p class="eyebrow">Start here</p>
           <h2>Tell us what you’re looking at.</h2>
-          <p>Send these details before or after checkout. Submitting the form opens a prepared email on your device; the website does not store your answers.</p>
+          <p>Submit these details after checkout. Your intake is delivered privately to our order desk so research can begin.</p>
           <div class="privacy-box">
             <strong>Do not email unredacted IDs, payment information, or full title documents.</strong>
             <p>Cover personal addresses, driver-license numbers, and account information. We’ll tell you what evidence is actually needed.</p>
           </div>
         </div>
-        <form id="intake-form" class="intake-form">
+        <form id="intake-form" class="intake-form" enctype="multipart/form-data">
+          <input id="started-at" name="startedAt" type="hidden">
+          <label class="honeypot" aria-hidden="true">Company website
+            <input id="company-website" name="companyWebsite" tabindex="-1" autocomplete="off">
+          </label>
           <label>Service
             <select id="service" name="service" required>
               <option value="Buyer Decision Report">Buyer Decision Report — $89</option>
@@ -221,22 +225,76 @@
               <input id="email" name="email" type="email" autocomplete="email" required>
             </label>
           </div>
+          <label>Phone <span class="optional">Optional</span>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="For order questions only">
+          </label>
           <label>Listing URL
             <input id="listing" name="listing" type="url" placeholder="https://…">
           </label>
           <div class="field-row">
             <label>VIN
-              <input id="vin" name="vin" minlength="17" maxlength="17" autocapitalize="characters" placeholder="17 characters">
+              <input id="vin" name="vin" minlength="17" maxlength="17" autocapitalize="characters" spellcheck="false" placeholder="17 characters">
             </label>
             <label>Asking price
               <input id="price" name="price" inputmode="numeric" placeholder="$">
             </label>
           </div>
-          <label>What should we know?
-            <textarea id="notes" name="notes" rows="5" placeholder="Mileage, title status, disclosed damage, seller claims, or your biggest concern"></textarea>
+          <div class="field-row three-up">
+            <label>Year
+              <input id="vehicle-year" name="year" inputmode="numeric" maxlength="4" placeholder="2020">
+            </label>
+            <label>Make
+              <input id="make" name="make" placeholder="Honda">
+            </label>
+            <label>Model
+              <input id="model" name="model" placeholder="Accord">
+            </label>
+          </div>
+          <div class="field-row">
+            <label>Current mileage
+              <input id="mileage" name="mileage" inputmode="numeric" placeholder="82,500">
+            </label>
+            <label>Vehicle location
+              <input id="location" name="location" placeholder="City, state">
+            </label>
+          </div>
+          <label>Known title status
+            <select id="title-status" name="titleStatus">
+              <option value="Unknown">Unknown</option>
+              <option value="Clean title reported">Clean title reported</option>
+              <option value="Lien reported">Lien reported</option>
+              <option value="Salvage or rebuilt reported">Salvage or rebuilt reported</option>
+              <option value="Other or unclear">Other or unclear</option>
+            </select>
           </label>
-          <button class="button button-primary" type="submit">Prepare my request</button>
-          <p class="form-note" id="form-note">Your email app will open with the details filled in. Payment is completed separately through Stripe.</p>
+          <label>Your biggest question or concern
+            <textarea id="concerns" name="concerns" rows="4" placeholder="What decision do you need this report to help you make?" required></textarea>
+          </label>
+          <label>Seller claims, disclosed damage, repairs, or known issues
+            <textarea id="seller-claims" name="sellerClaims" rows="4" placeholder="Paste the important claims or describe what has been disclosed"></textarea>
+          </label>
+          <fieldset>
+            <legend>Evidence you have</legend>
+            <div class="check-grid">
+              <label><input type="checkbox" name="evidence" value="Listing screenshots"> Listing screenshots</label>
+              <label><input type="checkbox" name="evidence" value="History report"> History report</label>
+              <label><input type="checkbox" name="evidence" value="Service invoices"> Service invoices</label>
+              <label><input type="checkbox" name="evidence" value="Vehicle photos"> Vehicle photos</label>
+              <label><input type="checkbox" name="evidence" value="Title or lien evidence"> Title/lien evidence</label>
+              <label><input type="checkbox" name="evidence" value="Inspection report"> Inspection report</label>
+            </div>
+          </fieldset>
+          <label>Attach up to 3 supporting files <span class="optional">PDF/JPG/PNG/WebP, 1 MB each</span>
+            <input id="files" name="files" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
+          </label>
+          <div class="form-consent">
+            <label><input id="redaction-accepted" name="redactionAccepted" type="checkbox" required> I removed payment data, ID numbers, account numbers, and unnecessary personal addresses from uploaded documents.</label>
+            <label><input id="terms-accepted" name="termsAccepted" type="checkbox" required> I agree to the <a href="terms.html" target="_blank">terms</a> and understand this is research—not an inspection, title guarantee, or warranty.</label>
+          </div>
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+          <button class="button button-primary" type="submit">Submit vehicle details</button>
+          <p class="form-note" id="form-note">Payment is completed separately through Stripe. We match your intake to the checkout email before research begins.</p>
+          <noscript><p class="form-error">JavaScript is required for secure intake. Email <a href="mailto:justin@websitecheckpro.com">justin@websitecheckpro.com</a> if needed.</p></noscript>
         </form>
       </div>
     </section>

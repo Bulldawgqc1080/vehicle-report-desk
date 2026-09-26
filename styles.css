@@ -31,6 +31,7 @@ body {
 img { display: block; max-width: 100%; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; }
+button:disabled { cursor: wait; opacity: .68; transform: none !important; }
 
 .skip-link {
   position: fixed;
@@ -229,13 +230,28 @@ h1 { max-width: 760px; margin-bottom: 25px; font-size: clamp(3rem, 6.5vw, 5.7rem
 .privacy-box p { margin-bottom: 0; font-size: .9rem !important; }
 .intake-form { display: grid; gap: 18px; padding: 34px; background: var(--green-50); border: 1px solid var(--line); border-radius: var(--radius); }
 .intake-form label { display: grid; gap: 7px; color: #405048; font-size: .88rem; font-weight: 800; }
+.intake-form .optional { color: var(--muted); font-size: .76rem; font-weight: 650; }
+.honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field-row.three-up { grid-template-columns: .55fr 1fr 1fr; }
 input, select, textarea { width: 100%; color: var(--ink); background: var(--white); border: 1px solid #bdcbc3; border-radius: 10px; outline: none; }
 input, select { height: 48px; padding: 0 13px; }
 textarea { min-height: 130px; padding: 12px 13px; resize: vertical; }
 input:focus, select:focus, textarea:focus { border-color: var(--green-700); box-shadow: 0 0 0 3px rgba(47,118,89,.14); }
 .intake-form .button { width: 100%; border: 0; }
 .form-note { margin: -5px 0 0; color: var(--muted); font-size: .8rem; text-align: center; }
+.intake-form fieldset { margin: 0; padding: 16px; border: 1px solid #bdcbc3; border-radius: 12px; }
+.intake-form legend { padding: 0 7px; color: #405048; font-size: .88rem; font-weight: 850; }
+.check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+.check-grid label, .form-consent label { display: flex; grid-template-columns: none; flex-direction: row; gap: 9px; align-items: flex-start; font-weight: 650; line-height: 1.35; }
+.check-grid input, .form-consent input { width: 18px; height: 18px; flex: 0 0 auto; margin: 1px 0 0; accent-color: var(--green-700); }
+.form-consent { display: grid; gap: 12px; padding: 15px; background: var(--white); border: 1px solid var(--line); border-radius: 12px; }
+.form-consent a { color: var(--green-700); }
+.form-status { display: none; padding: 12px 14px; border-radius: 10px; font-size: .88rem; font-weight: 750; }
+.form-status:not(:empty) { display: block; }
+.form-status.working { color: #405048; background: #edf3ef; }
+.form-status.success { color: #17633c; background: #dff3e7; border: 1px solid #b8ddc7; }
+.form-status.error, .form-error { color: #8b2424; background: var(--red-pale); border: 1px solid #e6bcbc; }
 
 .faq-list { display: grid; gap: 12px; max-width: 900px; }
 details { padding: 20px 22px; background: var(--white); border: 1px solid var(--line); border-radius: 13px; }
@@ -257,6 +273,12 @@ footer p { margin: 4px 0; }
   .proof-strip div:nth-child(2) { border-right: 0; }
   .proof-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .process-section, .intake-layout { grid-template-columns: 1fr; gap: 32px; }
+  .field-row.three-up { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 620px) {
+  .field-row, .field-row.three-up, .check-grid { grid-template-columns: 1fr; }
+  .intake-form { padding: 24px 18px; }
 }
 
 @media (max-width: 760px) {

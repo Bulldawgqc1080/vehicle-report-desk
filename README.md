@@ -19,7 +19,15 @@ The source belongs in GitHub, but the commercial website should be deployed thro
 
 ## Intake
 
-The intake form opens a prepared email to `justin@websitecheckpro.com`; it does not store submissions. Payments use Stripe-hosted Payment Links, while vehicle details and records remain separate from checkout.
+The intake form posts vehicle details and up to three small supporting files to `/api/intake`. The Vercel function validates the request and forwards the order summary and attachments to a private Telegram chat. Payments remain on Stripe-hosted Payment Links and must be matched to the intake email before work begins.
+
+Required Vercel Production environment variables:
+
+- `TELEGRAM_BOT_TOKEN` — secret bot token
+- `TELEGRAM_CHAT_ID` — private destination chat ID
+- `TELEGRAM_TOPIC_ID` — optional forum-topic ID
+
+Never commit those values. Without the first two variables, the endpoint returns a safe unavailable response and does not pretend the intake was received.
 
 ## Public sample policy
 
