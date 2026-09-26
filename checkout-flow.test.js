@@ -15,3 +15,11 @@ test("consent copy is wrapped as one flex item on mobile", () => {
   assert.match(html, /id="redaction-accepted"[^>]*><span>/);
   assert.match(html, /id="terms-accepted"[^>]*><span>/);
 });
+
+test("seller sample exposes the complete three-document kit", () => {
+  assert.match(html, /Complete 3-document Sell-Your-Car Kit/);
+  assert.match(html, /sample-seller-kit\.pdf/);
+  assert.match(html, /sample-seller-strategy-guide\.pdf/);
+  assert.match(html, /sample-seller-listing-kit\.pdf/);
+  assert.match(html, /sample-seller-highlights-sheet\.pdf/);
+});
