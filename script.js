@@ -85,12 +85,12 @@ if (intakeForm) {
       intakeForm.reset();
       document.querySelector("#started-at").value = String(Date.now());
       showStatus(`Received. Your order reference is ${result.orderId}. Save this number.`, "success");
-      formNote.textContent = "We’ll verify the matching Stripe payment and contact you if anything else is needed.";
+      formNote.textContent = "We’ll verify the matching Stripe payment. Information already submitted will not be requested again unless something is contradictory or unreadable.";
     } catch (error) {
       showStatus(`${error.message} You can also email justin@websitecheckpro.com.`, "error");
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent = "Submit vehicle details";
+      submitButton.textContent = "Submit paid order details";
     }
   });
 }

@@ -229,6 +229,8 @@ h1 { max-width: 760px; margin-bottom: 25px; font-size: clamp(3rem, 6.5vw, 5.7rem
 .intake-layout > div > p:not(.eyebrow) { color: var(--muted); font-size: 1.06rem; }
 .privacy-box { margin-top: 28px; padding: 18px; color: #663d00; background: var(--gold-pale); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; }
 .privacy-box p { margin-bottom: 0; font-size: .9rem !important; }
+.payment-reminder { margin-top: 24px; padding: 18px; color: var(--green-900); background: var(--green-50); border: 1px solid var(--line); border-radius: 12px; }
+.payment-reminder p { margin: 4px 0 7px; color: var(--muted); font-size: .9rem !important; }
 .intake-form { display: grid; gap: 18px; padding: 34px; background: var(--green-50); border: 1px solid var(--line); border-radius: var(--radius); }
 .intake-form label { display: grid; gap: 7px; color: #405048; font-size: .88rem; font-weight: 800; }
 .intake-form .optional { color: var(--muted); font-size: .76rem; font-weight: 650; }
@@ -247,6 +249,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--green-700); box-
 .check-grid label, .form-consent label { display: flex; grid-template-columns: none; flex-direction: row; gap: 9px; align-items: flex-start; font-weight: 650; line-height: 1.35; }
 .check-grid input, .form-consent input { width: 18px; height: 18px; flex: 0 0 auto; margin: 1px 0 0; accent-color: var(--green-700); }
 .form-consent { display: grid; gap: 12px; padding: 15px; background: var(--white); border: 1px solid var(--line); border-radius: 12px; }
+.form-consent label > span { flex: 1 1 auto; min-width: 0; }
 .form-consent a { color: var(--green-700); }
 .form-status { display: none; padding: 12px 14px; border-radius: 10px; font-size: .88rem; font-weight: 750; }
 .form-status:not(:empty) { display: block; }
@@ -287,7 +290,7 @@ footer p { margin: 4px 0; }
   .brand { font-size: .9rem; }
   .brand-mark { width: 35px; height: 35px; }
   .nav-cta { padding: 8px 12px; font-size: 0; }
-  .nav-cta::after { content: "Start"; font-size: .8rem; }
+  .nav-cta::after { content: "Pricing"; font-size: .8rem; }
   .hero { padding: 62px 20px 72px; }
   .hero::before { display: none; }
   h1 {

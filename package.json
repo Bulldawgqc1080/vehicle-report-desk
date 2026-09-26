@@ -4,7 +4,7 @@
   "description": "Static MVP landing page for two evidence-labeled used-vehicle research services:",
   "main": "script.js",
   "scripts": {
-    "test": "node --test api/*.test.js canonical-domain.test.js",
+    "test": "node --test api/*.test.js canonical-domain.test.js checkout-flow.test.js",
     "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check api/report-upload.js && node --check api/deliver.js && node --check tracker.js && node --check canonical-domain.js && npm test"
   },
   "repository": {
