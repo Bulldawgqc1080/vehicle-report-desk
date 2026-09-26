@@ -27,6 +27,10 @@ Required Vercel Production environment variables:
 - `TELEGRAM_CHAT_ID` — private destination chat ID
 - `TELEGRAM_TOPIC_ID` — optional forum-topic ID
 - Vercel Blob connection — private store using OIDC (`BLOB_STORE_ID` and `BLOB_WEBHOOK_PUBLIC_KEY` are added by Vercel)
+- `RESEND_API_KEY` — transactional-email credential, preferably provisioned through the Vercel Marketplace
+- `REPORT_FROM_EMAIL` — verified sender, including friendly name (for example `Vehicle Report Desk <reports@example.com>`)
+- `REPORT_REPLY_TO` — reply address; defaults to `justin@websitecheckpro.com`
+- `REPORT_BCC_EMAIL` — optional private delivery copy
 
 Never commit those values. Without the first two variables, the endpoint returns a safe unavailable response and does not pretend the intake was received.
 
@@ -37,6 +41,8 @@ Never commit those values. Without the first two variables, the endpoint returns
 `Intake Received → Payment Verified → Researching → Report Ready → Approved for Delivery → Delivered`
 
 Payment verification and delivery approval are explicit manual gates. Private order JSON and attachments never receive public Blob URLs. Rotating the Telegram bot token invalidates existing tracker links.
+
+The operator may upload or replace one final PDF (maximum 3 MB) before approval. The tracker requires a previewable PDF before `Report Ready`, blocks replacement after approval, and requires the exact customer email plus a second confirmation before sending. A successful Resend API response—not a button click—moves the order to `Delivered`. Each send uses a report-specific idempotency key and the stored delivery receipt prevents repeat sends.
 
 ## Public sample policy
 

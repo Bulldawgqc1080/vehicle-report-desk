@@ -3,6 +3,10 @@ const { STATUS_LABELS, bearerToken, verifyTrackerToken, transitionOrder, safeOrd
 
 let store = defaultStore;
 
+function deliveryConfigured() {
+  return Boolean(process.env.RESEND_API_KEY && process.env.REPORT_FROM_EMAIL);
+}
+
 function clean(value, max = 200) {
   return String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, max);
 }
@@ -36,10 +40,10 @@ module.exports = async function handler(req, res) {
       const orderId = clean(req.query?.order, 40);
       if (orderId) {
         const order = await store.getOrder(orderId);
-        return order ? res.status(200).json({ order: safeOrder(order) }) : res.status(404).json({ error: "Order not found." });
+        return order ? res.status(200).json({ order: safeOrder(order), deliveryConfigured: deliveryConfigured() }) : res.status(404).json({ error: "Order not found." });
       }
       const orders = await store.listOrders();
-      return res.status(200).json({ orders: orders.map(safeOrder) });
+      return res.status(200).json({ orders: orders.map(safeOrder), deliveryConfigured: deliveryConfigured() });
     }
 
     if (req.method === "PATCH") {
@@ -55,7 +59,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(405).json({ error: "Method not allowed." });
   } catch (error) {
-    const expected = /Next status|already delivered/.test(error.message);
+    const expected = /Next status|already delivered|approved email delivery|Upload the final PDF/.test(error.message);
     return res.status(expected ? 409 : 503).json({ error: expected ? error.message : "The private tracker is temporarily unavailable." });
   }
 };

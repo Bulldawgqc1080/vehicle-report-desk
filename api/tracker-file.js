@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
     const orderId = clean(req.query?.order, 40);
     const fileId = clean(req.query?.file, 500);
     const order = await store.getOrder(orderId);
-    const file = order?.files?.find((item) => item.pathname === fileId);
+    const file = order?.files?.find((item) => item.pathname === fileId) || (order?.report?.pathname === fileId ? order.report : null);
     if (!file) return res.status(404).json({ error: "Attachment not found." });
     const result = await store.getPrivateFile(file.pathname);
     if (!result || result.statusCode !== 200) return res.status(404).json({ error: "Attachment not found." });

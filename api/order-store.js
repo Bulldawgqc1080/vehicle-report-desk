@@ -35,6 +35,12 @@ async function saveNewOrder(order, files) {
   return saveOrder({ ...order, files: storedFiles });
 }
 
+async function saveReport(orderId, file) {
+  const pathname = `orders/${orderId}/report/final-report.pdf`;
+  await putPrivate(pathname, file.buffer, "application/pdf");
+  return { pathname, name: file.name, type: "application/pdf", size: file.buffer.length, sha256: file.sha256, uploadedAt: new Date().toISOString() };
+}
+
 async function streamText(stream) {
   return new Response(stream).text();
 }
@@ -59,4 +65,10 @@ async function getPrivateFile(pathname) {
   return get(pathname, { access: "private", useCache: false });
 }
 
-module.exports = { saveOrder, saveNewOrder, getOrder, listOrders, getPrivateFile };
+async function getPrivateBuffer(pathname) {
+  const result = await getPrivateFile(pathname);
+  if (!result || result.statusCode !== 200) return null;
+  return Buffer.from(await new Response(result.stream).arrayBuffer());
+}
+
+module.exports = { saveOrder, saveNewOrder, saveReport, getOrder, listOrders, getPrivateFile, getPrivateBuffer };

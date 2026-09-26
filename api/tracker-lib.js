@@ -47,7 +47,7 @@ function nextStatus(current) {
   return index >= 0 && index < STATUSES.length - 1 ? STATUSES[index + 1] : null;
 }
 
-function transitionOrder(order, requestedStatus, note, now = new Date().toISOString()) {
+function transitionOrder(order, requestedStatus, note, now = new Date().toISOString(), options = {}) {
   const requested = String(requestedStatus || "").trim();
   const cleanNote = String(note || "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, 1200);
   const updated = { ...order, updatedAt: now };
@@ -55,6 +55,8 @@ function transitionOrder(order, requestedStatus, note, now = new Date().toISOStr
   if (requested) {
     const expected = nextStatus(order.status);
     if (requested !== expected) throw new Error(expected ? `Next status must be ${expected}.` : "This order is already delivered.");
+    if (requested === "DELIVERED" && !options.allowDelivery) throw new Error("Use the approved email delivery action to mark this order delivered.");
+    if (requested === "REPORT_READY" && !order.report) throw new Error("Upload the final PDF before marking the report ready.");
     updated.status = requested;
     updated.timeline = [...(order.timeline || []), { status: requested, at: now, source: "operator" }];
   }
@@ -84,6 +86,8 @@ function safeOrder(order) {
     sellerClaims: order.sellerClaims,
     evidence: order.evidence,
     files: (order.files || []).map(({ pathname, ...file }) => ({ ...file, fileId: pathname })),
+    report: order.report ? (({ pathname, ...report }) => ({ ...report, fileId: pathname }))(order.report) : null,
+    delivery: order.delivery || null,
     operatorNote: order.operatorNote || "",
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
