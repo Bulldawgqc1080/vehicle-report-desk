@@ -96,7 +96,7 @@ function safeOrder(order) {
 }
 
 function trackerUrl(req, secret) {
-  const host = String(req.headers?.["x-forwarded-host"] || req.headers?.host || "vehicle-report-desk.vercel.app").split(",")[0].trim();
+  const host = String(req.headers?.["x-forwarded-host"] || req.headers?.host || "www.vehiclereportdesk.com").split(",")[0].trim();
   const proto = String(req.headers?.["x-forwarded-proto"] || "https").split(",")[0].trim();
   return `${proto}://${host}/tracker.html#token=${encodeURIComponent(trackerToken(secret))}`;
 }
