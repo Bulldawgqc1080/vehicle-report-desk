@@ -1,0 +1,28 @@
+{
+  "name": "vehicle-report-desk",
+  "version": "1.0.0",
+  "description": "Static MVP landing page for two evidence-labeled used-vehicle research services:",
+  "main": "script.js",
+  "scripts": {
+    "test": "node --test api/*.test.js",
+    "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check tracker.js && node --test api/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bulldawgqc1080/vehicle-report-desk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "bugs": {
+    "url": "https://github.com/Bulldawgqc1080/vehicle-report-desk/issues"
+  },
+  "homepage": "https://github.com/Bulldawgqc1080/vehicle-report-desk#readme",
+  "dependencies": {
+    "@vercel/blob": "^2.8.0"
+  }
+}

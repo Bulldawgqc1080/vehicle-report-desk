@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { validateVin, normalizeVin, validatePayload, buildTelegramMessage } = require("./intake")._test;
+const { validateVin, normalizeVin, validatePayload, buildTelegramMessage, setStore, resetStore } = require("./intake")._test;
 const handler = require("./intake");
 
 test("validates and normalizes real VIN input", () => {
@@ -32,6 +32,8 @@ test("accepts a valid intake and calls the private notification adapter", async 
   process.env.TELEGRAM_BOT_TOKEN = "test-token";
   process.env.TELEGRAM_CHAT_ID = "123456";
   let telegramCalls = 0;
+  let persistedOrder = null;
+  setStore({ async saveNewOrder(order) { persistedOrder = order; return order; } });
   global.fetch = async () => { telegramCalls += 1; return { ok: true }; };
   const req = {
     method: "POST",
@@ -53,7 +55,10 @@ test("accepts a valid intake and calls the private notification adapter", async 
     assert.equal(res.statusCode, 201);
     assert.match(res.body.orderId, /^VRD-\d{8}-[A-F0-9]{6}$/);
     assert.equal(telegramCalls, 1);
+    assert.equal(persistedOrder.status, "INTAKE_RECEIVED");
+    assert.equal(persistedOrder.email, "buyer@example.com");
   } finally {
+    resetStore();
     global.fetch = priorFetch;
     if (priorToken === undefined) delete process.env.TELEGRAM_BOT_TOKEN; else process.env.TELEGRAM_BOT_TOKEN = priorToken;
     if (priorChat === undefined) delete process.env.TELEGRAM_CHAT_ID; else process.env.TELEGRAM_CHAT_ID = priorChat;

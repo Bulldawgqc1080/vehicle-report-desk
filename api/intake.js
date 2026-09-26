@@ -1,4 +1,8 @@
 const crypto = require("node:crypto");
+const defaultStore = require("./order-store");
+const { trackerUrl } = require("./tracker-lib");
+
+let store = defaultStore;
 
 const MAX_FILES = 3;
 const MAX_FILE_BYTES = 1024 * 1024;
@@ -81,7 +85,7 @@ function buildTelegramMessage(order, data) {
     `<b>Title status:</b> ${value(data.titleStatus)}`, `<b>Listing:</b> ${value(data.listing)}`, "",
     `<b>Main concerns:</b> ${value(data.concerns)}`, `<b>Seller claims / known issues:</b> ${value(data.sellerClaims)}`,
     `<b>Evidence available:</b> ${value(data.evidence.join(", "))}`, `<b>Attachments:</b> ${data.files.length}`, "",
-    "⚠️ Match the customer email against Stripe before research begins.", "<b>Status:</b> PAID — VERIFY IN STRIPE → INTAKE RECEIVED",
+    "⚠️ Match the customer email against Stripe before research begins.", "<b>Status:</b> INTAKE RECEIVED — PAYMENT NOT YET VERIFIED",
   ].join("\n").slice(0, 4096);
 }
 
@@ -93,12 +97,18 @@ async function telegramCall(token, method, body) {
   if (!response.ok) throw new Error(`Telegram ${method} failed with ${response.status}.`);
 }
 
-async function notifyTelegram(order, data) {
+async function notifyTelegram(order, data, privateTrackerUrl) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) throw new Error("Order notifications are not configured.");
   const topicId = clean(process.env.TELEGRAM_TOPIC_ID, 20);
-  const message = new URLSearchParams({ chat_id: chatId, text: buildTelegramMessage(order, data), parse_mode: "HTML", disable_web_page_preview: "true" });
+  const message = new URLSearchParams({
+    chat_id: chatId,
+    text: buildTelegramMessage(order, data),
+    parse_mode: "HTML",
+    disable_web_page_preview: "true",
+    reply_markup: JSON.stringify({ inline_keyboard: [[{ text: "Open private order tracker", url: privateTrackerUrl }]] }),
+  });
   if (topicId) message.set("message_thread_id", topicId);
   await telegramCall(token, "sendMessage", message);
   for (const file of data.files) {
@@ -120,7 +130,33 @@ module.exports = async function handler(req, res) {
   try {
     const data = validatePayload(req.body || {});
     const order = orderId();
-    await notifyTelegram(order, data);
+    const nowIso = new Date().toISOString();
+    const record = {
+      orderId: order,
+      status: "INTAKE_RECEIVED",
+      service: data.service,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      listing: data.listing,
+      vin: data.vin,
+      year: data.year,
+      make: data.make,
+      model: data.model,
+      mileage: data.mileage,
+      price: data.price,
+      location: data.location,
+      titleStatus: data.titleStatus,
+      concerns: data.concerns,
+      sellerClaims: data.sellerClaims,
+      evidence: data.evidence,
+      operatorNote: "",
+      createdAt: nowIso,
+      updatedAt: nowIso,
+      timeline: [{ status: "INTAKE_RECEIVED", at: nowIso, source: "customer" }],
+    };
+    await store.saveNewOrder(record, data.files);
+    await notifyTelegram(order, data, trackerUrl(req, process.env.TELEGRAM_BOT_TOKEN));
     recentSubmissions.set(forwarded, now);
     return res.status(201).json({ orderId: order, message: "Vehicle details received." });
   } catch (error) {
@@ -129,4 +165,8 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { validateVin, normalizeVin, validatePayload, buildTelegramMessage };
+module.exports._test = {
+  validateVin, normalizeVin, validatePayload, buildTelegramMessage,
+  setStore(value) { store = value; },
+  resetStore() { store = defaultStore; },
+};

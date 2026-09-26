@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Private Order Tracker | Vehicle Report Desk</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="tracker.css">
+  <script src="tracker.js" defer></script>
+</head>
+<body class="tracker-page">
+  <header class="tracker-header">
+    <a class="brand" href="index.html" aria-label="Vehicle Report Desk home">Vehicle Report Desk</a>
+    <span class="private-badge">Private order desk</span>
+  </header>
+  <main class="tracker-shell">
+    <section class="tracker-intro">
+      <div>
+        <p class="eyebrow">Operations</p>
+        <h1>Order tracker</h1>
+        <p>Verify payment and approve delivery manually. Everything else stays organized here.</p>
+      </div>
+      <button id="refresh-orders" class="button button-secondary" type="button">Refresh</button>
+    </section>
+
+    <div id="tracker-status" class="tracker-status" role="status" aria-live="polite">Opening your private order desk…</div>
+    <section id="tracker-app" class="tracker-app" hidden>
+      <aside class="order-sidebar" aria-label="Orders">
+        <div class="order-filters">
+          <label for="order-search">Find an order</label>
+          <input id="order-search" type="search" placeholder="Order, customer, VIN">
+        </div>
+        <div id="order-list" class="order-list"></div>
+      </aside>
+      <article id="order-detail" class="order-detail" aria-live="polite"></article>
+    </section>
+  </main>
+</body>
+</html>
