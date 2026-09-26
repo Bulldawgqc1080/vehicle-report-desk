@@ -4,8 +4,8 @@
   "description": "Static MVP landing page for two evidence-labeled used-vehicle research services:",
   "main": "script.js",
   "scripts": {
-    "test": "node --test api/*.test.js",
-    "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check api/report-upload.js && node --check api/deliver.js && node --check tracker.js && node --test api/*.test.js"
+    "test": "node --test api/*.test.js middleware.test.mjs",
+    "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check api/report-upload.js && node --check api/deliver.js && node --check tracker.js && node --check middleware.mjs && npm test"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Bulldawgqc1080/vehicle-report-desk#readme",
   "dependencies": {
-    "@vercel/blob": "^2.8.0"
+    "@vercel/blob": "^2.8.0",
+    "@vercel/functions": "^3.9.9"
   }
 }
