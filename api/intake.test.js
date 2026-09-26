@@ -14,6 +14,15 @@ test("rejects an intake without required acknowledgments", () => {
   assert.throws(() => validatePayload({ service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com", concerns: "Should I inspect it?", startedAt: Date.now() - 5000 }), /acknowledgments/);
 });
 
+test("accepts the Sell-Your-Car Kit service", () => {
+  const payload = validatePayload({
+    service: "Sell-Your-Car Kit", name: "Test Seller", email: "seller@example.com",
+    concerns: "Help me price and list it", startedAt: Date.now() - 5000,
+    termsAccepted: true, redactionAccepted: true, files: [],
+  });
+  assert.equal(payload.service, "Sell-Your-Car Kit");
+});
+
 test("produces a bounded private-order summary", () => {
   const message = buildTelegramMessage("VRD-20260925-ABC123", {
     service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com", phone: "", year: "2003", make: "Honda", model: "Element",

@@ -8,7 +8,7 @@ const MAX_FILES = 3;
 const MAX_FILE_BYTES = 1024 * 1024;
 const MAX_TOTAL_FILE_BYTES = 2500 * 1024;
 const ALLOWED_FILE_TYPES = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
-const SERVICES = new Set(["Buyer Decision Report", "Seller Transparency Packet"]);
+const SERVICES = new Set(["Buyer Decision Report", "Sell-Your-Car Kit", "Seller Transparency Packet"]);
 const recentSubmissions = new Map();
 
 function clean(value, max = 2000) {

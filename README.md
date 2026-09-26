@@ -3,7 +3,7 @@
 Static MVP landing page for two evidence-labeled used-vehicle research services:
 
 - Buyer Decision Report
-- Seller Transparency Packet
+- Sell-Your-Car Kit
 
 ## Local preview
 

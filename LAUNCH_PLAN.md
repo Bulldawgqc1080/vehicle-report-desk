@@ -17,7 +17,7 @@ Avoid dealer-placement agreements, vehicle-finding, negotiation, transaction arr
 
 1. Complete 10 reports at founding-customer pricing:
    - Buyer report: $49
-   - Seller packet: $39
+   - Sell-Your-Car Kit: $39
 2. Require permission before using any anonymized excerpt or testimonial.
 3. Track: inquiry source, paid conversion, turnaround time, refund/request rate, and which report sections customers mention.
 4. Raise to published pricing ($89 / $69) after five paid reports and two usable testimonials.
@@ -35,7 +35,7 @@ Publish short, anonymized listing teardowns:
 - “Three things missing from this $15,000 Marketplace listing”
 - “Why no open recall does not prove a repair was completed”
 - “The invoice you need after ‘internal transmission repaired’”
-- “Seller packet: what a serious buyer actually wants to see”
+- “Five changes that make a private-party car listing easier to sell”
 
 End with one call to action: submit the listing for a report.
 
@@ -49,7 +49,7 @@ Create focused pages after the first sales prove the offer:
 
 - Used car buyer report
 - Facebook Marketplace car research
-- Private-party seller transparency packet
+- Private-party Sell-Your-Car Kit
 - Used car inspection checklist Arizona
 
 ### 5. Google Search Ads
