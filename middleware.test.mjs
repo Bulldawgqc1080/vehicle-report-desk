@@ -1,23 +1,24 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { canonicalRedirectTarget } from "./canonical-redirect.mjs";
+import middleware from "./middleware.mjs";
 
 test("redirects the Vercel fallback host to the canonical domain", () => {
-  const destination = canonicalRedirectTarget(
-    "https://vehicle-report-desk.vercel.app/tracker?order=123"
+  const response = middleware(
+    new Request("https://vehicle-report-desk.vercel.app/tracker?order=123")
   );
 
+  assert.equal(response.status, 308);
   assert.equal(
-    destination,
+    response.headers.get("location"),
     "https://www.vehiclereportdesk.com/tracker?order=123"
   );
 });
 
 test("allows the canonical host to continue normally", () => {
-  const destination = canonicalRedirectTarget(
-    "https://www.vehiclereportdesk.com/tracker"
+  const response = middleware(
+    new Request("https://www.vehiclereportdesk.com/tracker")
   );
 
-  assert.equal(destination, null);
+  assert.equal(response.headers.get("x-middleware-next"), "1");
 });
