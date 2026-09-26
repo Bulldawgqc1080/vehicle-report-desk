@@ -5,7 +5,7 @@
   "main": "script.js",
   "scripts": {
     "test": "node --test api/*.test.js middleware.test.mjs",
-    "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check api/report-upload.js && node --check api/deliver.js && node --check tracker.js && node --check middleware.mjs && npm test"
+    "check": "node --check api/intake.js && node --check api/tracker.js && node --check api/tracker-file.js && node --check api/report-upload.js && node --check api/deliver.js && node --check tracker.js && node --check canonical-redirect.mjs && npm test"
   },
   "repository": {
     "type": "git",
