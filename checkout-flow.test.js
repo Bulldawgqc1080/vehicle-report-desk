@@ -29,7 +29,10 @@ test("buyer offer, sample, trust, and fulfillment copy stay aligned", () => {
   assert.match(html, /Get my buyer report · \$89/);
   assert.match(html, /Full-history Honda Element decision report/);
   assert.match(html, /Open complete report · 5 pages/);
-  assert.match(html, /Independent research, reviewed by a real person/);
+  assert.match(html, /Hi, I’m Justin\./);
+  assert.match(html, /20 years serving as a firefighter in Arizona/);
+  assert.match(html, /husband and dad to three daughters/);
+  assert.match(html, /personally review every report/);
   assert.match(html, /One vehicle/);
   assert.match(html, /2–3 business days/);
   assert.match(html, /One clarification round included/);
