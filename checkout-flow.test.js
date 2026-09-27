@@ -35,7 +35,7 @@ test("buyer offer, sample, trust, and fulfillment copy stay aligned", () => {
   assert.match(html, /personally review every report/);
   assert.match(html, /One vehicle/);
   assert.match(html, /within 2 business days/);
-  assert.match(html, /One follow-up response within 7 days/);
+  assert.match(html, /One follow-up included—send questions within 7 days of delivery/);
   assert.doesNotMatch(html, /Listing-only preliminary screen/);
   assert.doesNotMatch(html, /sample Lexus buyer report/);
 });
@@ -55,6 +55,6 @@ test("presale contact, research proof, and direct upload limits are visible", ()
   assert.match(html, /id="contact-form"/);
   assert.match(html, /A source should change the decision/);
   assert.match(html, /Registration history/);
-  assert.match(html, /up to 10 MB each/);
-  assert.match(html, /Maximum combined size: 25 MB/);
+  assert.match(html, /Long-term registration in a road-salt region makes structural corrosion a priority for inspection/);
+  assert.match(html, /Upload up to 5 files\. Maximum 10 MB per file and 25 MB total\./);
 });
