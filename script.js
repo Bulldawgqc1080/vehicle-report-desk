@@ -3,9 +3,10 @@ const intakeForm = document.querySelector("#intake-form");
 const formNote = document.querySelector("#form-note");
 const formStatus = document.querySelector("#form-status");
 const submitButton = intakeForm?.querySelector("button[type='submit']");
-const MAX_FILES = 3;
-const MAX_FILE_BYTES = 1024 * 1024;
-const MAX_TOTAL_FILE_BYTES = 2500 * 1024;
+const MAX_FILES = 5;
+const MAX_FILE_BYTES = 900 * 1024;
+const MAX_TOTAL_FILE_BYTES = 3 * 1024 * 1024;
+const MAX_IMAGE_DIMENSION = 2200;
 
 document.querySelectorAll("[data-service]").forEach((link) => {
   link.addEventListener("click", () => {
@@ -29,14 +30,57 @@ function validateVin(value) {
   return vin[8] === expected ? "" : `VIN check digit should be ${expected}. Please recheck it.`;
 }
 
-function fileToPayload(file) {
+function readAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error(`Could not read ${file.name}.`));
-    reader.onload = () => resolve({ name: file.name, type: file.type, data: String(reader.result).split(",")[1] });
+    reader.onload = () => resolve(String(reader.result));
     reader.readAsDataURL(file);
   });
 }
+
+function canvasToBlob(canvas, quality) {
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", quality));
+}
+
+async function prepareFile(file) {
+  if (file.type === "application/pdf") {
+    if (file.size > MAX_FILE_BYTES) throw new Error(`${file.name} is larger than 900 KB. Please submit without it and reply to the confirmation email for help.`);
+    return file;
+  }
+  if (!file.type.startsWith("image/")) throw new Error(`${file.name} is not a supported PDF or image.`);
+  if (file.size <= MAX_FILE_BYTES) return file;
+
+  const sourceUrl = await readAsDataUrl(file);
+  const image = await new Promise((resolve, reject) => {
+    const element = new Image();
+    element.onload = () => resolve(element);
+    element.onerror = () => reject(new Error(`Could not compress ${file.name}. Save it as JPG, PNG, or WebP and try again.`));
+    element.src = sourceUrl;
+  });
+  const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+  let blob = null;
+  for (const quality of [.82, .72, .62, .52]) {
+    blob = await canvasToBlob(canvas, quality);
+    if (blob && blob.size <= MAX_FILE_BYTES) break;
+  }
+  if (!blob || blob.size > MAX_FILE_BYTES) throw new Error(`${file.name} could not be reduced below 900 KB.`);
+  const safeName = file.name.replace(/\.[^.]+$/, "") + "-compressed.jpg";
+  return new File([blob], safeName, { type: "image/jpeg" });
+}
+
+async function fileToPayload(file) {
+  const dataUrl = await readAsDataUrl(file);
+  return { name: file.name, type: file.type, data: dataUrl.split(",")[1] };
+}
+
+document.querySelectorAll("[data-track]").forEach((link) => {
+  link.addEventListener("click", () => window.va?.("event", { name: link.dataset.track }));
+});
 
 function showStatus(message, type = "working") {
   formStatus.textContent = message;
@@ -57,9 +101,8 @@ if (intakeForm) {
     vinInput.setCustomValidity(validateVin(vinInput.value));
     if (!intakeForm.reportValidity()) return;
     const selectedFiles = [...document.querySelector("#files").files];
-    const totalBytes = selectedFiles.reduce((sum, file) => sum + file.size, 0);
-    if (selectedFiles.length > MAX_FILES || selectedFiles.some((file) => file.size > MAX_FILE_BYTES) || totalBytes > MAX_TOTAL_FILE_BYTES) {
-      showStatus("Attach no more than 3 files, 1 MB each and 2.5 MB combined.", "error");
+    if (selectedFiles.length > MAX_FILES) {
+      showStatus("Attach no more than 5 files.", "error");
       return;
     }
 
@@ -67,7 +110,11 @@ if (intakeForm) {
     submitButton.textContent = "Sending securely…";
     showStatus("Sending your vehicle details to the order desk…");
     try {
-      const files = await Promise.all(selectedFiles.map(fileToPayload));
+      const preparedFiles = [];
+      for (const file of selectedFiles) preparedFiles.push(await prepareFile(file));
+      const totalBytes = preparedFiles.reduce((sum, file) => sum + file.size, 0);
+      if (totalBytes > MAX_TOTAL_FILE_BYTES) throw new Error("Combined attachments are still larger than 3 MB. Submit the most important files first and reply to the confirmation email for help.");
+      const files = await Promise.all(preparedFiles.map(fileToPayload));
       const payload = {
         service: serviceSelect.value, name: document.querySelector("#name").value.trim(), email: document.querySelector("#email").value.trim(),
         phone: document.querySelector("#phone").value.trim(), listing: document.querySelector("#listing").value.trim(), vin: vinInput.value,
@@ -87,7 +134,7 @@ if (intakeForm) {
       showStatus(`Received. Your order reference is ${result.orderId}. Save this number.`, "success");
       formNote.textContent = "We’ll verify the matching Stripe payment. Information already submitted will not be requested again unless something is contradictory or unreadable.";
     } catch (error) {
-      showStatus(`${error.message} You can also email justin@websitecheckpro.com.`, "error");
+      showStatus(error.message, "error");
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = "Submit paid order details";

@@ -23,6 +23,17 @@ test("accepts the Sell-Your-Car Kit service", () => {
   assert.equal(payload.service, "Sell-Your-Car Kit");
 });
 
+test("accepts five compressed-size attachments and rejects a sixth", () => {
+  const file = { name: "photo.jpg", type: "image/jpeg", data: Buffer.from("small image").toString("base64") };
+  const base = {
+    service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com",
+    concerns: "Should I inspect it?", startedAt: Date.now() - 5000,
+    termsAccepted: true, redactionAccepted: true,
+  };
+  assert.equal(validatePayload({ ...base, files: Array(5).fill(file) }).files.length, 5);
+  assert.throws(() => validatePayload({ ...base, files: Array(6).fill(file) }), /no more than 5 files/);
+});
+
 test("produces a bounded private-order summary", () => {
   const message = buildTelegramMessage("VRD-20260925-ABC123", {
     service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com", phone: "", year: "2003", make: "Honda", model: "Element",

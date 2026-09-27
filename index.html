@@ -9,7 +9,11 @@
   <link rel="canonical" href="https://www.vehiclereportdesk.com/">
   <script src="/canonical-domain.js"></script>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20260925-checkout-flow">
+  <link rel="stylesheet" href="styles.css?v=20260926-conversion">
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="script.js"></script>
   <script type="application/ld+json">
   {
@@ -18,7 +22,6 @@
     "name": "Vehicle Report Desk",
     "description": "Vehicle-specific decision reports for used-car buyers and private-party sales kits for sellers.",
     "areaServed": "United States",
-    "email": "justin@websitecheckpro.com",
     "serviceType": ["Used Vehicle Research", "Buyer Decision Report", "Sell-Your-Car Kit"]
   }
   </script>
@@ -43,17 +46,19 @@
   <main id="main">
     <section class="hero" id="top">
       <div class="hero-copy">
-        <p class="eyebrow">Used-car research without fake certainty</p>
-        <h1>Know what deserves a closer look—and what deserves a walk-away.</h1>
-        <p class="hero-lead">We help buyers avoid expensive mistakes—and help private sellers price, present, and sell their vehicle with less friction.</p>
+        <p class="eyebrow">Independent, vehicle-specific research</p>
+        <h1>Buying a used car? Know what to question before you commit.</h1>
+        <p class="hero-lead">Send the listing and VIN. Get a clear PDF covering warning signs, price context, seller questions, and exactly what your mechanic should inspect.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#buyer">I’m buying a vehicle</a>
-          <a class="button button-secondary" href="#seller">I’m selling a vehicle</a>
+          <a class="button button-primary" href="#pricing" data-track="Buyer hero CTA">Get my buyer report · $89</a>
+          <a class="button button-secondary" href="assets/reports/sample-buyer-report.pdf" target="_blank" rel="noopener" data-track="Buyer sample hero">View a sample report</a>
         </div>
+        <p class="hero-meta">One vehicle · Delivered by email in 2–3 business days after complete intake</p>
+        <a class="seller-route" href="#seller">Selling instead? See the $69 Sell-Your-Car Kit →</a>
         <ul class="trust-list" aria-label="Service principles">
-          <li>Every claim labeled by evidence</li>
-          <li>No dealer commissions</li>
-          <li>No “certified” nonsense</li>
+          <li>Independent research</li>
+          <li>Clearly sourced findings</li>
+          <li>Practical next steps</li>
         </ul>
       </div>
       <aside class="hero-card" aria-label="How evidence is labeled">
@@ -124,13 +129,18 @@
       <div class="sample-grid">
         <article class="sample-card">
           <a class="sample-image-link" href="assets/reports/sample-buyer-report.pdf" target="_blank" rel="noopener">
-            <img src="assets/images/buyer-report-preview.jpg" alt="First page preview of a sample Lexus buyer report" width="850" height="1100">
+            <img src="assets/images/buyer-report-preview.jpg" alt="First page preview of a sample Honda Element buyer report" width="850" height="1100">
           </a>
           <div class="sample-copy">
             <p class="card-kicker">Buyer sample</p>
-            <h3>Listing-only preliminary screen</h3>
-            <p>Shows how a thin listing is handled when the VIN, mileage, title, and history are missing.</p>
-            <a class="button button-small" href="assets/reports/sample-buyer-report.pdf" target="_blank" rel="noopener">Open sample PDF</a>
+            <h3>Full-history Honda Element decision report</h3>
+            <p>A complete five-page example with history reconciliation, model-specific risks, price logic, seller questions, and a lift-inspection checklist.</p>
+            <div class="sample-verdict">
+              <strong>Conditional negotiate · PPI required</strong>
+              <span>$6,500 ask · $4,800–$5,000 opening offer · $5,750 ceiling</span>
+            </div>
+            <p class="sample-insight"><strong>Why it matters:</strong> Massachusetts salt exposure and unexplained internal transmission work control this decision.</p>
+            <a class="button button-small" href="assets/reports/sample-buyer-report.pdf" target="_blank" rel="noopener" data-track="Buyer sample section">Open complete report · 5 pages</a>
           </div>
         </article>
 
@@ -158,6 +168,18 @@
       </div>
     </section>
 
+    <section class="section about-section" id="about">
+      <div class="about-card">
+        <div class="founder-mark" aria-hidden="true">JR</div>
+        <div>
+          <p class="eyebrow">Who prepares your report</p>
+          <h2>Independent research, reviewed by a real person.</h2>
+          <p>Vehicle Report Desk was founded by Justin to turn scattered listings, VIN data, history records, market evidence, and model-specific risks into a practical decision. Every customer report is personally reviewed before delivery.</p>
+          <p class="about-disclosure"><strong>Straight answer:</strong> Justin is an independent vehicle researcher—not a mechanic, dealer, appraiser, or insurer. Reports show their sources, label what is verified versus seller-reported, and direct physical-condition questions to a buyer-selected inspection shop.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section process-section" id="process">
       <div class="section-heading">
         <p class="eyebrow">Simple process</p>
@@ -181,30 +203,33 @@
           <p class="card-kicker">For buyers</p>
           <h3>Buyer Decision Report</h3>
           <p class="price"><span>$</span>89</p>
-          <p>Best when you have a listing and VIN. Final verdict strength depends on the evidence supplied.</p>
+          <p>One vehicle. Best when you have the listing, VIN, mileage, and asking price. Verdict strength depends on the evidence supplied.</p>
           <ul>
             <li>Vehicle-specific research</li>
             <li>Price and risk screen</li>
             <li>Inspection checklist</li>
-            <li>PDF delivered by email</li>
+            <li>PDF emailed in 2–3 business days after complete intake</li>
+            <li>One clarification round included</li>
           </ul>
-          <a class="button button-light" href="https://buy.stripe.com/fZu6ozgVO6nDcAZ9DD93y03">Pay securely — $89</a>
+          <a class="button button-light" href="https://buy.stripe.com/fZu6ozgVO6nDcAZ9DD93y03" data-track="Buyer checkout">Pay securely — $89</a>
         </article>
         <article class="price-card">
           <p class="card-kicker">For sellers</p>
           <h3>Sell-Your-Car Kit</h3>
           <p class="price"><span>$</span>69</p>
-          <p>Built to help you attract serious buyers, defend the asking price, and move safely from listing to payment.</p>
+          <p>One vehicle. Built to help you attract serious buyers, defend the asking price, and move safely from listing to payment.</p>
           <ul>
             <li>Pricing and positioning strategy</li>
             <li>Ready-to-post marketplace copy</li>
             <li>Photo, buyer-response, and negotiation plan</li>
             <li>Vehicle Highlights Sheet</li>
+            <li>PDF kit emailed in 2–3 business days after complete intake</li>
+            <li>One clarification round included</li>
           </ul>
-          <a class="button button-outline-light" href="https://buy.stripe.com/6oUaEP20U8vL44t7vv93y04">Pay securely — $69</a>
+          <a class="button button-outline-light" href="https://buy.stripe.com/6oUaEP20U8vL44t7vv93y04" data-track="Seller checkout">Pay securely — $69</a>
         </article>
       </div>
-      <p class="pricing-note">Secure checkout is hosted by Stripe. By purchasing, you agree to our <a href="terms.html">terms</a> and <a href="privacy.html">privacy notice</a>. Research only: we do not contact sellers, negotiate, arrange a transaction, perform mechanical inspections, or sell a proprietary vehicle-history report.</p>
+      <p class="pricing-note">Secure checkout is hosted by Stripe. CARFAX and AutoCheck are not included; you may supply one for review. If a listing disappears, send screenshots or saved details—we will confirm whether enough evidence remains before research begins. By purchasing, you agree to our <a href="terms.html">terms</a> and <a href="privacy.html">privacy notice</a>.</p>
     </section>
 
     <section class="section" id="start">
@@ -301,9 +326,10 @@
               <label><input type="checkbox" name="evidence" value="Inspection report"> Inspection report</label>
             </div>
           </fieldset>
-          <label>Attach up to 3 supporting files <span class="optional">PDF/JPG/PNG/WebP, 1 MB each</span>
+          <label>Attach up to 5 supporting files <span class="optional">PDF/JPG/PNG/WebP. Large phone photos are compressed automatically.</span>
             <input id="files" name="files" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
           </label>
+          <p class="upload-help">Select all files in one pass. PDFs must be 900 KB or smaller; if a larger report will not upload, submit the order and reply to the confirmation email for help.</p>
           <div class="form-consent">
             <label><input id="redaction-accepted" name="redactionAccepted" type="checkbox" required><span>I removed payment data, ID numbers, account numbers, and unnecessary personal addresses from uploaded documents.</span></label>
             <label><input id="terms-accepted" name="termsAccepted" type="checkbox" required><span>I agree to the <a href="terms.html" target="_blank">terms</a> and understand this is research—not an inspection, title guarantee, or warranty.</span></label>
@@ -311,7 +337,7 @@
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
           <button class="button button-primary" type="submit">Submit paid order details</button>
           <p class="form-note" id="form-note">Checkout happens first through Stripe. We match this form to the checkout email before research begins.</p>
-          <noscript><p class="form-error">JavaScript is required for secure intake. Email <a href="mailto:justin@websitecheckpro.com">justin@websitecheckpro.com</a> if needed.</p></noscript>
+          <noscript><p class="form-error">JavaScript is required for secure intake. Please enable it and reload this page.</p></noscript>
         </form>
       </div>
     </section>
@@ -324,9 +350,12 @@
       <div class="faq-list">
         <details><summary>Is this a mechanical inspection?</summary><p>No. Reports turn available evidence into specific inspection targets, but a qualified buyer-selected shop must inspect the vehicle physically.</p></details>
         <details><summary>Does the report include CARFAX or AutoCheck?</summary><p>No. We do not reproduce or resell consumer history reports. You may supply a report for review, and buyers should obtain original history information directly from an authorized provider.</p></details>
+        <details><summary>How long does it take?</summary><p>Normal delivery is within two to three business days after payment and complete vehicle information are received. We will contact you if missing or unusual records delay research.</p></details>
+        <details><summary>What if the listing disappears?</summary><p>Send any saved screenshots, VIN, price, mileage, seller claims, and records you have. We will confirm whether there is enough evidence to proceed; if not, you may cancel for a full refund before research begins.</p></details>
+        <details><summary>Can I ask a follow-up question?</summary><p>Yes. One reasonable clarification round about the delivered report is included. New evidence or a different vehicle may require a new order.</p></details>
         <details><summary>Can you guarantee the title is clean or the vehicle is reliable?</summary><p>No. History sources can be incomplete, and no research can predict every future failure. Material unknowns remain labeled unknown.</p></details>
         <details><summary>Will you negotiate or contact the other party?</summary><p>No. We provide research and decision support only. We do not arrange purchases, contact sellers on a buyer’s behalf, negotiate, take deposits, or earn commission from a vehicle sale.</p></details>
-        <details><summary>Why would a buyer trust a seller-sponsored packet?</summary><p>Because it clearly says who sponsored it, labels every fact by evidence, discloses what is missing, and tells the buyer to verify title, history, and condition independently. It is organized disclosure—not certification.</p></details>
+        <details><summary>What is the seller’s Vehicle Highlights Sheet?</summary><p>It is a concise, seller-sponsored handout built from the information supplied for the kit. It is not a certification. Buyers should still verify title, history, and physical condition independently.</p></details>
       </div>
     </section>
   </main>
@@ -334,7 +363,7 @@
   <footer>
     <div><strong>Vehicle Report Desk</strong><p>Evidence-labeled research for used-car decisions.</p></div>
     <div class="footer-links">
-      <a href="mailto:justin@websitecheckpro.com">Contact</a>
+      <a href="#about">About</a>
       <a href="privacy.html">Privacy</a>
       <a href="terms.html">Terms</a>
       <a href="#top">Back to top</a>

@@ -23,3 +23,26 @@ test("seller sample exposes the complete three-document kit", () => {
   assert.match(html, /sample-seller-listing-kit\.pdf/);
   assert.match(html, /sample-seller-highlights-sheet\.pdf/);
 });
+
+test("buyer offer, sample, trust, and fulfillment copy stay aligned", () => {
+  assert.match(html, /Buying a used car\? Know what to question before you commit\./);
+  assert.match(html, /Get my buyer report · \$89/);
+  assert.match(html, /Full-history Honda Element decision report/);
+  assert.match(html, /Open complete report · 5 pages/);
+  assert.match(html, /Independent research, reviewed by a real person/);
+  assert.match(html, /One vehicle/);
+  assert.match(html, /2–3 business days/);
+  assert.match(html, /One clarification round included/);
+  assert.doesNotMatch(html, /Listing-only preliminary screen/);
+  assert.doesNotMatch(html, /sample Lexus buyer report/);
+});
+
+test("homepage no longer exposes the unrelated legacy email brand", () => {
+  assert.doesNotMatch(html, /websitecheckpro\.com/);
+});
+
+test("analytics and click events are installed without collecting form contents", () => {
+  assert.match(html, /\/_vercel\/insights\/script\.js/);
+  assert.match(html, /data-track="Buyer checkout"/);
+  assert.match(html, /data-track="Seller checkout"/);
+});

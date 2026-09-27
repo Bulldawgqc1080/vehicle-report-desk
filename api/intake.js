@@ -4,9 +4,9 @@ const { trackerUrl } = require("./tracker-lib");
 
 let store = defaultStore;
 
-const MAX_FILES = 3;
-const MAX_FILE_BYTES = 1024 * 1024;
-const MAX_TOTAL_FILE_BYTES = 2500 * 1024;
+const MAX_FILES = 5;
+const MAX_FILE_BYTES = 900 * 1024;
+const MAX_TOTAL_FILE_BYTES = 3 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
 const SERVICES = new Set(["Buyer Decision Report", "Sell-Your-Car Kit", "Seller Transparency Packet"]);
 const recentSubmissions = new Map();
@@ -37,10 +37,10 @@ function validateVin(vin) {
 function decodeFile(file) {
   const name = clean(file?.name, 120);
   const type = clean(file?.type, 80).toLowerCase();
-  const data = clean(file?.data, 2_000_000);
+  const data = clean(file?.data, 1_300_000);
   if (!name || !ALLOWED_FILE_TYPES.has(type) || !/^[A-Za-z0-9+/]+={0,2}$/.test(data)) throw new Error("Each attachment must be a PDF, JPG, PNG, or WebP file.");
   const buffer = Buffer.from(data, "base64");
-  if (!buffer.length || buffer.length > MAX_FILE_BYTES) throw new Error("Each attachment must be 1 MB or smaller.");
+  if (!buffer.length || buffer.length > MAX_FILE_BYTES) throw new Error("Each attachment must be 900 KB or smaller after image compression.");
   return { name, type, buffer };
 }
 
@@ -60,7 +60,7 @@ function validatePayload(body) {
   if (!body.termsAccepted || !body.redactionAccepted) throw new Error("Required acknowledgments are missing.");
   const files = Array.isArray(body.files) ? body.files.map(decodeFile) : [];
   if (files.length > MAX_FILES) throw new Error(`Attach no more than ${MAX_FILES} files.`);
-  if (files.reduce((sum, file) => sum + file.buffer.length, 0) > MAX_TOTAL_FILE_BYTES) throw new Error("Combined attachments must be 2.5 MB or smaller.");
+  if (files.reduce((sum, file) => sum + file.buffer.length, 0) > MAX_TOTAL_FILE_BYTES) throw new Error("Combined attachments must be 3 MB or smaller.");
   return {
     service, name, email, vin, files,
     phone: clean(body.phone, 40), listing: clean(body.listing, 1200), year: clean(body.year, 4),
