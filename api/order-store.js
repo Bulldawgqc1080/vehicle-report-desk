@@ -35,6 +35,29 @@ async function saveNewOrder(order, files) {
   return saveOrder({ ...order, files: storedFiles });
 }
 
+async function claimUploads(orderId, sessionId, uploads) {
+  if (!uploads?.length) return { storedFiles: [], deliveryFiles: [] };
+  const { head, rename } = await blobApi();
+  const allowedTypes = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
+  const storedFiles = [];
+  const deliveryFiles = [];
+  let totalSize = 0;
+  for (const upload of uploads) {
+    if (!String(upload.pathname).startsWith(`pending-intake/${sessionId}/`)) throw new Error("Attachment session mismatch.");
+    const source = await head(upload.pathname, { access: "private" });
+    totalSize += source.size;
+    if (!allowedTypes.has(source.contentType) || source.size > 10 * 1024 * 1024 || totalSize > 25 * 1024 * 1024) throw new Error("Attachment limits were exceeded.");
+    const safeName = String(upload.name || "attachment").replace(/[^A-Za-z0-9._-]+/g, "-").slice(0, 100) || "attachment";
+    const pathname = `orders/${orderId}/attachments/${crypto.randomBytes(5).toString("hex")}-${safeName}`;
+    const moved = await rename(source.pathname, pathname, { access: "private", contentType: source.contentType, cacheControlMaxAge: 60 });
+    const buffer = await getPrivateBuffer(moved.pathname);
+    if (!buffer) throw new Error("Stored attachment could not be read.");
+    storedFiles.push({ pathname: moved.pathname, name: upload.name, type: source.contentType, size: source.size });
+    deliveryFiles.push({ name: upload.name, type: source.contentType, buffer });
+  }
+  return { storedFiles, deliveryFiles };
+}
+
 async function saveReport(orderId, file) {
   const pathname = `orders/${orderId}/report/final-report.pdf`;
   await putPrivate(pathname, file.buffer, "application/pdf");
@@ -71,4 +94,4 @@ async function getPrivateBuffer(pathname) {
   return Buffer.from(await new Response(result.stream).arrayBuffer());
 }
 
-module.exports = { saveOrder, saveNewOrder, saveReport, getOrder, listOrders, getPrivateFile, getPrivateBuffer };
+module.exports = { saveOrder, saveNewOrder, claimUploads, saveReport, getOrder, listOrders, getPrivateFile, getPrivateBuffer };

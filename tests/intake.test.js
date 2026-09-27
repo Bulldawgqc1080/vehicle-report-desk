@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { validateVin, normalizeVin, validatePayload, buildTelegramMessage, setStore, resetStore } = require("../api/intake")._test;
 const handler = require("../api/intake");
+const SESSION = "123e4567-e89b-42d3-a456-426614174000";
 
 test("validates and normalizes real VIN input", () => {
   const vin = normalizeVin("5j6yh275x3l050944");
@@ -11,27 +12,27 @@ test("validates and normalizes real VIN input", () => {
 });
 
 test("rejects an intake without required acknowledgments", () => {
-  assert.throws(() => validatePayload({ service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com", concerns: "Should I inspect it?", startedAt: Date.now() - 5000 }), /acknowledgments/);
+  assert.throws(() => validatePayload({ service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com", concerns: "Should I inspect it?", startedAt: Date.now() - 5000, uploadSessionId: SESSION }), /acknowledgments/);
 });
 
 test("accepts the Sell-Your-Car Kit service", () => {
   const payload = validatePayload({
     service: "Sell-Your-Car Kit", name: "Test Seller", email: "seller@example.com",
     concerns: "Help me price and list it", startedAt: Date.now() - 5000,
-    termsAccepted: true, redactionAccepted: true, files: [],
+    termsAccepted: true, redactionAccepted: true, uploadSessionId: SESSION, uploads: [],
   });
   assert.equal(payload.service, "Sell-Your-Car Kit");
 });
 
-test("accepts five compressed-size attachments and rejects a sixth", () => {
-  const file = { name: "photo.jpg", type: "image/jpeg", data: Buffer.from("small image").toString("base64") };
+test("accepts five direct private upload references and rejects a sixth", () => {
+  const file = { name: "photo.jpg", type: "image/jpeg", size: 2 * 1024 * 1024, pathname: `pending-intake/${SESSION}/photo-random.jpg` };
   const base = {
     service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com",
     concerns: "Should I inspect it?", startedAt: Date.now() - 5000,
-    termsAccepted: true, redactionAccepted: true,
+    termsAccepted: true, redactionAccepted: true, uploadSessionId: SESSION,
   };
-  assert.equal(validatePayload({ ...base, files: Array(5).fill(file) }).files.length, 5);
-  assert.throws(() => validatePayload({ ...base, files: Array(6).fill(file) }), /no more than 5 files/);
+  assert.equal(validatePayload({ ...base, uploads: Array(5).fill(file) }).uploads.length, 5);
+  assert.throws(() => validatePayload({ ...base, uploads: Array(6).fill(file) }), /no more than 5 files/);
 });
 
 test("produces a bounded private-order summary", () => {
@@ -53,7 +54,10 @@ test("accepts a valid intake and calls the private notification adapter", async 
   process.env.TELEGRAM_CHAT_ID = "123456";
   let telegramCalls = 0;
   let persistedOrder = null;
-  setStore({ async saveNewOrder(order) { persistedOrder = order; return order; } });
+  setStore({
+    async claimUploads() { return { storedFiles: [], deliveryFiles: [] }; },
+    async saveOrder(order) { persistedOrder = order; return order; },
+  });
   global.fetch = async () => { telegramCalls += 1; return { ok: true }; };
   const req = {
     method: "POST",
@@ -61,7 +65,8 @@ test("accepts a valid intake and calls the private notification adapter", async 
     body: {
       service: "Buyer Decision Report", name: "Test Buyer", email: "buyer@example.com",
       vin: "5J6YH275X3L050944", concerns: "Should I inspect it?",
-      startedAt: Date.now() - 5000, termsAccepted: true, redactionAccepted: true, files: [],
+      startedAt: Date.now() - 5000, termsAccepted: true, redactionAccepted: true,
+      uploadSessionId: SESSION, uploads: [],
     },
   };
   const res = {

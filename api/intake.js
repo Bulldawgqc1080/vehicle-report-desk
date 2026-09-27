@@ -5,8 +5,8 @@ const { trackerUrl } = require("./tracker-lib");
 let store = defaultStore;
 
 const MAX_FILES = 5;
-const MAX_FILE_BYTES = 900 * 1024;
-const MAX_TOTAL_FILE_BYTES = 3 * 1024 * 1024;
+const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_TOTAL_FILE_BYTES = 25 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
 const SERVICES = new Set(["Buyer Decision Report", "Sell-Your-Car Kit", "Seller Transparency Packet"]);
 const recentSubmissions = new Map();
@@ -34,14 +34,15 @@ function validateVin(vin) {
   return vin[8] === expected ? { valid: true, message: "Check digit valid" } : { valid: false, message: `VIN check digit should be ${expected}.` };
 }
 
-function decodeFile(file) {
-  const name = clean(file?.name, 120);
-  const type = clean(file?.type, 80).toLowerCase();
-  const data = clean(file?.data, 1_300_000);
-  if (!name || !ALLOWED_FILE_TYPES.has(type) || !/^[A-Za-z0-9+/]+={0,2}$/.test(data)) throw new Error("Each attachment must be a PDF, JPG, PNG, or WebP file.");
-  const buffer = Buffer.from(data, "base64");
-  if (!buffer.length || buffer.length > MAX_FILE_BYTES) throw new Error("Each attachment must be 900 KB or smaller after image compression.");
-  return { name, type, buffer };
+function validateUploadReference(upload, sessionId) {
+  const name = clean(upload?.name, 120);
+  const type = clean(upload?.type, 80).toLowerCase();
+  const pathname = clean(upload?.pathname, 500);
+  const size = Number(upload?.size || 0);
+  if (!name || !ALLOWED_FILE_TYPES.has(type)) throw new Error("Each attachment must be a PDF, JPG, PNG, or WebP file.");
+  if (!pathname.startsWith(`pending-intake/${sessionId}/`)) throw new Error("Attachment session mismatch.");
+  if (!Number.isFinite(size) || size <= 0 || size > MAX_FILE_BYTES) throw new Error("Each attachment must be 10 MB or smaller.");
+  return { name, type, pathname, size };
 }
 
 function validatePayload(body) {
@@ -58,11 +59,13 @@ function validatePayload(body) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Enter a valid email address.");
   if (!vinResult.valid) throw new Error(vinResult.message);
   if (!body.termsAccepted || !body.redactionAccepted) throw new Error("Required acknowledgments are missing.");
-  const files = Array.isArray(body.files) ? body.files.map(decodeFile) : [];
-  if (files.length > MAX_FILES) throw new Error(`Attach no more than ${MAX_FILES} files.`);
-  if (files.reduce((sum, file) => sum + file.buffer.length, 0) > MAX_TOTAL_FILE_BYTES) throw new Error("Combined attachments must be 3 MB or smaller.");
+  const uploadSessionId = clean(body.uploadSessionId, 40);
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uploadSessionId)) throw new Error("Invalid attachment session.");
+  const uploads = Array.isArray(body.uploads) ? body.uploads.map((upload) => validateUploadReference(upload, uploadSessionId)) : [];
+  if (uploads.length > MAX_FILES) throw new Error(`Attach no more than ${MAX_FILES} files.`);
+  if (uploads.reduce((sum, file) => sum + file.size, 0) > MAX_TOTAL_FILE_BYTES) throw new Error("Combined attachments must be 25 MB or smaller.");
   return {
-    service, name, email, vin, files,
+    service, name, email, vin, uploadSessionId, uploads, files: [],
     phone: clean(body.phone, 40), listing: clean(body.listing, 1200), year: clean(body.year, 4),
     make: clean(body.make, 80), model: clean(body.model, 80), mileage: clean(body.mileage, 30),
     price: clean(body.price, 30), location: clean(body.location, 120), titleStatus: clean(body.titleStatus, 80),
@@ -130,6 +133,8 @@ module.exports = async function handler(req, res) {
   try {
     const data = validatePayload(req.body || {});
     const order = orderId();
+    const claimed = await store.claimUploads(order, data.uploadSessionId, data.uploads);
+    data.files = claimed.deliveryFiles;
     const nowIso = new Date().toISOString();
     const record = {
       orderId: order,
@@ -150,17 +155,18 @@ module.exports = async function handler(req, res) {
       concerns: data.concerns,
       sellerClaims: data.sellerClaims,
       evidence: data.evidence,
+      files: claimed.storedFiles,
       operatorNote: "",
       createdAt: nowIso,
       updatedAt: nowIso,
       timeline: [{ status: "INTAKE_RECEIVED", at: nowIso, source: "customer" }],
     };
-    await store.saveNewOrder(record, data.files);
+    await store.saveOrder(record);
     await notifyTelegram(order, data, trackerUrl(req, process.env.TELEGRAM_BOT_TOKEN));
     recentSubmissions.set(forwarded, now);
     return res.status(201).json({ orderId: order, message: "Vehicle details received." });
   } catch (error) {
-    const expected = /Enter |Select |VIN |attachment|acknowledgment|review|rejected|no more|Combined/.test(error.message);
+    const expected = /Enter |Select |VIN |attachment|acknowledgment|review|rejected|no more|Combined|Invalid attachment/.test(error.message);
     return res.status(expected ? 400 : 503).json({ error: expected ? error.message : "We could not deliver your intake. Please try again or email support." });
   }
 };

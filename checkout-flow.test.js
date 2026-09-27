@@ -28,14 +28,14 @@ test("buyer offer, sample, trust, and fulfillment copy stay aligned", () => {
   assert.match(html, /Buying a used car\? Know what to question before you commit\./);
   assert.match(html, /Get my buyer report · \$89/);
   assert.match(html, /Full-history Honda Element decision report/);
-  assert.match(html, /Open complete report · 5 pages/);
+  assert.match(html, /Open complete report · 6 pages/);
   assert.match(html, /Hi, I’m Justin\./);
   assert.match(html, /20 years serving as a firefighter in Arizona/);
   assert.match(html, /husband and dad to three daughters/);
   assert.match(html, /personally review every report/);
   assert.match(html, /One vehicle/);
-  assert.match(html, /2–3 business days/);
-  assert.match(html, /One clarification round included/);
+  assert.match(html, /within 2 business days/);
+  assert.match(html, /One follow-up response within 7 days/);
   assert.doesNotMatch(html, /Listing-only preliminary screen/);
   assert.doesNotMatch(html, /sample Lexus buyer report/);
 });
@@ -48,4 +48,13 @@ test("analytics and click events are installed without collecting form contents"
   assert.match(html, /data-track="Buyer checkout"/);
   assert.match(html, /data-track="Seller checkout"/);
   assert.doesNotMatch(html, /\/_vercel\/insights\/script\.js/);
+});
+
+test("presale contact, research proof, and direct upload limits are visible", () => {
+  assert.match(html, /Questions before ordering\?/);
+  assert.match(html, /id="contact-form"/);
+  assert.match(html, /A source should change the decision/);
+  assert.match(html, /Registration history/);
+  assert.match(html, /up to 10 MB each/);
+  assert.match(html, /Maximum combined size: 25 MB/);
 });

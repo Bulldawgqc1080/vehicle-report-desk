@@ -10,6 +10,7 @@ const ALLOWED_EVENTS = new Set([
   "intake_submit",
   "intake_received",
   "payment_success_return",
+  "contact_received",
 ]);
 const recentEvents = new Map();
 

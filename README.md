@@ -19,7 +19,7 @@ The source belongs in GitHub, but the commercial website should be deployed thro
 
 ## Intake
 
-The intake form posts vehicle details and up to three small supporting files to `/api/intake`. The Vercel function validates the request, persists the order and attachments in a private Vercel Blob store, and forwards the order summary and a signed tracker link to a private Telegram chat. Payments remain on Stripe-hosted Payment Links and must be matched to the intake email before work begins.
+The intake form uploads up to five PDF/image files directly to private Vercel Blob storage (10 MB each, 25 MB combined), then posts the vehicle details and private upload references to `/api/intake`. The Vercel function validates and claims those uploads, persists the order, and forwards the order summary and a signed tracker link to a private Telegram chat. Payments remain on Stripe-hosted Payment Links and must be matched to the intake email before work begins.
 
 Required Vercel Production environment variables:
 
