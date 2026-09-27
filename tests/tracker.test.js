@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const handler = require("./tracker");
-const { trackerToken, verifyTrackerToken, nextStatus, transitionOrder } = require("./tracker-lib");
+const handler = require("../api/tracker");
+const { trackerToken, verifyTrackerToken, nextStatus, transitionOrder } = require("../api/tracker-lib");
 
 function response() {
   return {

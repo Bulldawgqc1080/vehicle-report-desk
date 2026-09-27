@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { validateEvent } = require("./analytics")._test;
+const { validateEvent } = require("../api/analytics")._test;
 
 test("accepts only bounded conversion events and paths", () => {
   assert.deepEqual(validateEvent({ event: "Buyer checkout", path: "/" }), { event: "Buyer checkout", path: "/" });

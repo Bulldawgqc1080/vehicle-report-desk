@@ -1,10 +1,10 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("node:crypto");
-const uploadHandler = require("./report-upload");
-const deliverHandler = require("./deliver");
-const { trackerToken, transitionOrder } = require("./tracker-lib");
-const { decodeReport, emailContent, validateDelivery } = require("./delivery-lib");
+const uploadHandler = require("../api/report-upload");
+const deliverHandler = require("../api/deliver");
+const { trackerToken, transitionOrder } = require("../api/tracker-lib");
+const { decodeReport, emailContent, validateDelivery } = require("../api/delivery-lib");
 
 function response() {
   return {

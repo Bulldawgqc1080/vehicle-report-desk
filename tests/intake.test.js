@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { validateVin, normalizeVin, validatePayload, buildTelegramMessage, setStore, resetStore } = require("./intake")._test;
-const handler = require("./intake");
+const { validateVin, normalizeVin, validatePayload, buildTelegramMessage, setStore, resetStore } = require("../api/intake")._test;
+const handler = require("../api/intake");
 
 test("validates and normalizes real VIN input", () => {
   const vin = normalizeVin("5j6yh275x3l050944");
