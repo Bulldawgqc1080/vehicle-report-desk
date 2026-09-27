@@ -78,8 +78,19 @@ async function fileToPayload(file) {
   return { name: file.name, type: file.type, data: dataUrl.split(",")[1] };
 }
 
+function trackEvent(event, path = window.location.pathname) {
+  const body = JSON.stringify({ event, path });
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon("/api/analytics", new Blob([body], { type: "application/json" }));
+    return;
+  }
+  fetch("/api/analytics", { method: "POST", headers: { "content-type": "application/json" }, body, keepalive: true }).catch(() => {});
+}
+
+trackEvent("page_view");
+if (document.querySelector("[data-payment-success]")) trackEvent("payment_success_return");
 document.querySelectorAll("[data-track]").forEach((link) => {
-  link.addEventListener("click", () => window.va?.("event", { name: link.dataset.track }));
+  link.addEventListener("click", () => trackEvent(link.dataset.track));
 });
 
 function showStatus(message, type = "working") {
@@ -98,6 +109,7 @@ if (intakeForm) {
 
   intakeForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    trackEvent("intake_submit");
     vinInput.setCustomValidity(validateVin(vinInput.value));
     if (!intakeForm.reportValidity()) return;
     const selectedFiles = [...document.querySelector("#files").files];
@@ -132,6 +144,7 @@ if (intakeForm) {
       intakeForm.reset();
       document.querySelector("#started-at").value = String(Date.now());
       showStatus(`Received. Your order reference is ${result.orderId}. Save this number.`, "success");
+      trackEvent("intake_received");
       formNote.textContent = "We’ll verify the matching Stripe payment. Information already submitted will not be requested again unless something is contradictory or unreadable.";
     } catch (error) {
       showStatus(error.message, "error");

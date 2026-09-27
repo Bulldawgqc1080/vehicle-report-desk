@@ -42,7 +42,7 @@ test("homepage no longer exposes the unrelated legacy email brand", () => {
 });
 
 test("analytics and click events are installed without collecting form contents", () => {
-  assert.match(html, /\/_vercel\/insights\/script\.js/);
   assert.match(html, /data-track="Buyer checkout"/);
   assert.match(html, /data-track="Seller checkout"/);
+  assert.doesNotMatch(html, /\/_vercel\/insights\/script\.js/);
 });
