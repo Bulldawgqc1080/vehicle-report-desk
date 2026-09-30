@@ -50,6 +50,15 @@ test("analytics and click events are installed without collecting form contents"
   assert.doesNotMatch(html, /\/_vercel\/insights\/script\.js/);
 });
 
+test("live checkouts and early trust copy stay aligned to Vehicle Report Desk", () => {
+  assert.match(html, /https:\/\/buy\.stripe\.com\/3cI8wPbEvcdj16temcgEg00/);
+  assert.match(html, /https:\/\/buy\.stripe\.com\/fZueVdeQH2CJ4iFfqggEg01/);
+  assert.match(html, /We research the listing, explain the risks, and help you decide what to ask and inspect\. CARFAX or AutoCheck purchases are separate\./);
+  assert.match(html, /Personally reviewed by Justin, an Arizona firefighter and independent vehicle researcher\./);
+  assert.doesNotMatch(html, /fZu6ozgVO6nDcAZ9DD93y03/);
+  assert.doesNotMatch(html, /6oUaEP20U8vL44t7vv93y04/);
+});
+
 test("presale contact, research proof, and direct upload limits are visible", () => {
   assert.match(html, /Questions before ordering\?/);
   assert.match(html, /id="contact-form"/);

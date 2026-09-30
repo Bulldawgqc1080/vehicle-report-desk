@@ -118,7 +118,8 @@ nav a:hover { color: var(--green-700); }
 }
 h1, h2, h3 { margin-top: 0; line-height: 1.08; letter-spacing: -0.035em; }
 h1 { max-width: 760px; margin-bottom: 20px; font-size: clamp(2.75rem, 5.1vw, 4.55rem); }
-.hero-lead { max-width: 700px; margin-bottom: 30px; color: #526159; font-size: clamp(1.08rem, 2vw, 1.3rem); }
+.hero-lead { max-width: 700px; margin-bottom: 12px; color: #526159; font-size: clamp(1.08rem, 2vw, 1.3rem); }
+.hero-scope { max-width: 700px; margin: 0 0 26px; color: var(--green-800); font-size: .96rem; font-weight: 750; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .button {
   display: inline-flex;
@@ -241,6 +242,7 @@ h1 { max-width: 760px; margin-bottom: 20px; font-size: clamp(2.75rem, 5.1vw, 4.5
 .process-list p { margin: 0; color: var(--muted); }
 
 .section-dark { color: #d9e5df; background: var(--green-950); }
+.pricing-reviewer { max-width: 720px; margin: 0; color: #c6d7cf; font-size: 1rem; }
 .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .price-card { padding: 36px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius); }
 .price-card.featured { background: var(--green-800); border-color: rgba(255,255,255,.3); }
