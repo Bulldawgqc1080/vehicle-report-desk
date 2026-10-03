@@ -59,6 +59,14 @@ test("live checkouts and early trust copy stay aligned to Vehicle Report Desk", 
   assert.doesNotMatch(html, /6oUaEP20U8vL44t7vv93y04/);
 });
 
+test("social previews use a dedicated large branded image", () => {
+  assert.match(html, /property="og:image" content="https:\/\/www\.vehiclereportdesk\.com\/assets\/images\/social-preview\.png\?v=20261002"/);
+  assert.match(html, /property="og:image:width" content="1200"/);
+  assert.match(html, /property="og:image:height" content="630"/);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/www\.vehiclereportdesk\.com\/assets\/images\/social-preview\.png\?v=20261002"/);
+});
+
 test("presale contact, research proof, and direct upload limits are visible", () => {
   assert.match(html, /Questions before ordering\?/);
   assert.match(html, /id="contact-form"/);

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Vehicle Report Desk buyer decision report</title>
+  <desc id="desc">A branded social preview for independent used-car research and buyer decision reports.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e2b22"/>
+      <stop offset="1" stop-color="#20513e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.38" r="0.64">
+      <stop offset="0" stop-color="#43896b" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#15392d" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#071a14" flood-opacity="0.48"/>
+    </filter>
+    <clipPath id="reportClip">
+      <rect x="811" y="88" width="292" height="453" rx="12"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <path d="M818 0h382v630H975c-43-97-65-201-65-312 0-113-31-220-92-318Z" fill="#ffffff" opacity="0.035"/>
+
+  <g transform="translate(70 58)">
+    <rect width="54" height="54" rx="15" fill="#ffffff"/>
+    <text x="27" y="35" text-anchor="middle" fill="#15392d" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" letter-spacing="1">VR</text>
+    <text x="72" y="24" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800">Vehicle Report Desk</text>
+    <text x="72" y="48" fill="#b9d1c5" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600">Independent vehicle-specific research</text>
+  </g>
+
+  <g transform="translate(70 173)">
+    <rect width="310" height="36" rx="18" fill="#d69a2d"/>
+    <text x="155" y="24" text-anchor="middle" fill="#10271f" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="0.55">BUYER DECISION REPORT · $89</text>
+
+    <text x="0" y="104" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" letter-spacing="-1.5">
+      <tspan x="0" dy="0">Know the car</tspan>
+      <tspan x="0" dy="59">before you commit.</tspan>
+    </text>
+
+    <text x="0" y="256" fill="#d9e5df" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="500">
+      <tspan x="0" dy="0">Send the listing and VIN. Get warning signs,</tspan>
+      <tspan x="0" dy="34">price context, seller questions, and a mechanic</tspan>
+      <tspan x="0" dy="34">inspection checklist in one clear PDF.</tspan>
+    </text>
+
+    <g transform="translate(0 380)">
+      <circle cx="9" cy="9" r="9" fill="#d69a2d"/>
+      <path d="m5 9 3 3 6-7" fill="none" stroke="#15392d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="30" y="15" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">Personally reviewed</text>
+
+      <circle cx="209" cy="9" r="9" fill="#d69a2d"/>
+      <path d="m205 9 3 3 6-7" fill="none" stroke="#15392d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="230" y="15" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">Delivered by email</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)" transform="rotate(3 957 315)">
+    <rect x="794" y="70" width="326" height="489" rx="18" fill="#f8fbf9"/>
+    <rect x="811" y="88" width="292" height="453" rx="12" fill="#ffffff"/>
+    <image href="buyer-report-preview.jpg" x="811" y="88" width="292" height="453" preserveAspectRatio="xMidYMin slice" clip-path="url(#reportClip)"/>
+  </g>
+
+  <g transform="translate(746 477)">
+    <rect width="184" height="46" rx="23" fill="#ffffff"/>
+    <text x="92" y="29" text-anchor="middle" fill="#15392d" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">WARNING SIGNS</text>
+  </g>
+  <g transform="translate(921 525)">
+    <rect width="211" height="46" rx="23" fill="#d69a2d"/>
+    <text x="105.5" y="29" text-anchor="middle" fill="#10271f" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="800">PRICE CONTEXT</text>
+  </g>
+
+  <text x="70" y="590" fill="#b9d1c5" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" letter-spacing="0.3">VehicleReportDesk.com</text>
+</svg>
